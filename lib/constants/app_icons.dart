@@ -2,5 +2,5 @@
 import 'package:flutter/material.dart';
 
 class AppIcons {
-  static const home = Icons.home;
+  static const arrow_icon = Icons.arrow_circle_left_outlined;
 }
