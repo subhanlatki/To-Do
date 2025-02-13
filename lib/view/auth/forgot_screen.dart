@@ -1,8 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
-import 'package:get/utils.dart';
 import 'package:todo/constants/app_colors.dart';
 import 'package:todo/constants/app_icons.dart';
 import 'package:todo/constants/app_image.dart';
@@ -11,9 +11,18 @@ import 'package:todo/widgets/button/common_button.dart';
 import 'package:todo/widgets/field/common_textfield.dart';
 
 
-class ForgotPasswordScreen extends StatelessWidget {
-  final TextEditingController ForgotPassword = TextEditingController();
+class ForgotPasswordScreen extends StatefulWidget {
+
    ForgotPasswordScreen ({super.key});
+
+  @override
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final TextEditingController emailController = TextEditingController();
+
+   bool loading=false;
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +71,26 @@ class ForgotPasswordScreen extends StatelessWidget {
                             return 'Please entre your email';
                           }return null;
                         },
-                        hintText: 'Forgot Password', controller: ForgotPassword),
+                        hintText: 'Forgot Password', controller: emailController),
                      ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 30.h),
-                      child: CommonButton(title: "Forgot", ontap: (){
+                      child: CommonButton(
+                        isloading: loading,
+                        title: "Forgot", ontap: () async{
+                           
                         if (_formKey.currentState!.validate()) {
-                              Get.to(ProfileDashboardScreen());
+                          loading =true;
+                          setState(() {
+                            
+                          });
+           
+                            await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
+                              Get.to(()=> const ProfileDashboardScreen());
+                                 loading =false;
+                              setState(() {
+                             
+                              });
                         }
                         
                       }

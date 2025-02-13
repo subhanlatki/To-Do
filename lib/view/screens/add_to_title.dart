@@ -6,9 +6,14 @@ import 'package:todo/constants/app_colors.dart';
 import 'package:todo/constants/app_icons.dart';
 
 
-class AddToTitle extends StatelessWidget {
+class AddToTitle extends StatefulWidget {
   const AddToTitle({super.key});
 
+  @override
+  State<AddToTitle> createState() => _AddToTitleState();
+}
+
+class _AddToTitleState extends State<AddToTitle> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +21,7 @@ class AddToTitle extends StatelessWidget {
       body:  SafeArea(
         child:  
         Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 11.w,vertical: 10.h),
+          padding:  EdgeInsets.symmetric(horizontal: 12.w,vertical: 12.h),
           child: Column( 
             children: [ 
                Align(

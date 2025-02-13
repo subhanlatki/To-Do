@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:todo/constants/app_colors.dart';
 import 'package:todo/constants/app_image.dart';
 import 'package:todo/view/auth/signup_screen.dart';
@@ -16,7 +17,10 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
+  
+    bool isloading = false;
     return Scaffold( 
+      
        backgroundColor: AppColors.Color3,
        body: SafeArea(child: 
         Padding(
@@ -51,9 +55,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     SizedBox(height: 18.h),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 50.h),
-                    child: CommonButton(title: "Get Started ", ontap: (){
-                      Get.to(SignupScreen());
-                     
+                    child: CommonButton(
+                      
+                      title: "Get Started ", ontap:  () {  
+                        final box =GetStorage();
+                        box.write('isonboardingplayed', true) ;
+                                    
+                      Get.to(()=>SignupScreen());
                     }),
                   )
                ],

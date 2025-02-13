@@ -1,32 +1,57 @@
-
- import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'package:get/state_manager.dart';
-import 'package:todo/view/auth/login_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:todo/view/auth/signup_screen.dart';
+import 'package:todo/view/screens/onboarding_screen.dart';
+
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-   @override
+  final box = GetStorage();
+
+  @override
   void initState() {
-    
     super.initState();
-    Timer(Duration(seconds: 5), (){
-      Get.to(LoginScreen());
-    }
-    );
+    _navigateToHome();
   }
+
+  _navigateToHome() async {
+    await Future.delayed(Duration(seconds: 3), () {});
+    bool isonboardingplayed = box.read('isonboardingplayed');
+    if (isonboardingplayed==true) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => SignupScreen()));
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => OnboardingScreen()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
-
-    );
-  }
-}
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        width: double.infinity.w,
+        height: double.infinity.h,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Text(
+                'Get things done with TODo',
+                style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'font1'),
+              ),
+            ),
+          ],
+        ),
+      ));}}

@@ -8,4 +8,5 @@ class AppColors {
    static const  Color5 = Color(0xffC9A9A9);
    static const  Color6 = Color(0xffB9C9A9);
    static const  Color7 = Color(0xffAAA9C9);
+    static const  red = Colors.red;
 }
