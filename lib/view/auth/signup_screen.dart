@@ -123,6 +123,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           Padding(
                         padding: EdgeInsets.symmetric(vertical: 40),
                         child: CommonButton(
+                          
                           isloading:  Loading,
                           title: "Sign Up", ontap: () async{
                         
@@ -155,7 +156,7 @@ class _SignupScreenState extends State<SignupScreen> {
                          }
                        
                         
-                        }
+                        }, 
                         ),
                       ),
                        

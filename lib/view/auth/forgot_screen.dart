@@ -80,16 +80,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         title: "Forgot", ontap: () async{
                            
                         if (_formKey.currentState!.validate()) {
-                          loading =true;
+                          
                           setState(() {
-                            
+                            loading =true;
                           });
            
                             await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
                               Get.to(()=> const ProfileDashboardScreen());
-                                 loading =false;
+                            
                               setState(() {
-                             
+                                  loading =false;
                               });
                         }
                         
