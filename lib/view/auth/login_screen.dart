@@ -7,6 +7,7 @@ import 'package:get/instance_manager.dart';
 import 'package:todo/constants/app_colors.dart';
 import 'package:todo/constants/app_icons.dart';
 import 'package:todo/constants/app_image.dart';
+import 'package:todo/controller/auth_controller.dart';
 import 'package:todo/utils/toastutil.dart';
 import 'package:todo/view/auth/forgot_screen.dart';
 import 'package:todo/view/auth/signup_screen.dart';
@@ -26,7 +27,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController confirmPasswordController = TextEditingController();
-       bool Loading=false;
+
+
+
+       AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -110,38 +114,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 20.h),
-                        child: CommonButton(
-                          isloading: Loading,
-                          title: "Sign In", ontap: () async{
+                        child:
                         
-                          if (_formkey.currentState!.validate()) {
-                            try {
-                             Loading = true;
-                             setState(() {
-                              
-                             });
-                            await   FirebaseAuth.instance
-                            .signInWithEmailAndPassword(email: emailController.text,
-                             password: confirmPasswordController.text);
-                         Get.to(AddToDoScreen());
-                          Loading = false;
-                          setState(() {
-                           
-                          });
-                              tostmasage.succes('you have succes fuly Signup');
-                          } on FirebaseAuthException catch (e) {
-                           tostmasage.error('an Eror occourd');
-                              Loading =false;
-                          setState(() {
-                            
-                          });
-                          
-                          }
+                        Obx(() =>  CommonButton(
+                          isloading: authController.isLoading.value,
+                          title: "Sign In", ontap: ()=>authController.login(emailController, confirmPasswordController, _formkey)
+                        ),)
                         
-                         }
-                         
-                          }
-                        ),
+                        
                       ),
                              SizedBox(height: 1.h),
                       Row( 

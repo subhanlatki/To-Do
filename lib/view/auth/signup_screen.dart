@@ -1,10 +1,13 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:todo/constants/app_colors.dart';
 import 'package:todo/constants/app_icons.dart';
+import 'package:todo/controller/auth_controller.dart';
 import 'package:todo/utils/toastutil.dart';
 import 'package:todo/view/auth/login_screen.dart';
 import 'package:todo/view/screens/add_to_do_screen.dart';
@@ -17,6 +20,7 @@ class SignupScreen extends StatefulWidget {
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
+  
 }
 
 class _SignupScreenState extends State<SignupScreen> {
@@ -28,11 +32,15 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final TextEditingController confirmPasswordController = TextEditingController();
 
-   bool Loading=false;
+     AuthController authController = Get.put(AuthController());
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+     final _formKey = GlobalKey<FormState>(); 
     return Scaffold( 
       backgroundColor: AppColors.Color3,
         body: SingleChildScrollView(
@@ -122,41 +130,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           Padding(
                         padding: EdgeInsets.symmetric(vertical: 40),
-                        child: CommonButton(
-                          isloading:  Loading,
-                          title: "Sign Up", ontap: () async{
-                        
-                         if (_formKey.currentState!.validate()) {
-                          try {
-                              Loading =true;
-                          setState(() {
-                            
-                          });
-                        
-                          
-                          await  FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                              Get.to(AddToDoScreen());
-                              
-                               Loading =false;
-                          setState(() {
-                            
-                          });
-                          tostmasage.succes('you have succes fuly Signup');
-                          } on FirebaseAuthException catch (e) {
-                           tostmasage.error('an Eror occourd');
-                              Loading =false;
-                          setState(() {
-                            
-                          });
-                          
-                          }
-                        
-                         }
+                        child:  Obx(() =>  CommonButton(
+                          isloading: authController.isLoading.value,
+                          title: "Sign In", ontap: ()=>authController.signup(emailController, confirmPasswordController, _formKey)
+                        ),)
+                         
                        
-                        
-                        }
-                        ),
+                     
                       ),
                        
                       Row( 
@@ -194,5 +174,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
     );
+
   }
+
 }

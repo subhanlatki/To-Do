@@ -1,17 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:todo/constants/app_colors.dart';
 import 'package:todo/constants/app_icons.dart';
 import 'package:todo/constants/app_image.dart';
-import 'package:todo/view/screens/profileDashboard_screen.dart';
+import 'package:todo/view/screens/add_to_home.dart';
 import 'package:todo/widgets/button/common_button.dart';
 import 'package:todo/widgets/field/common_textfield.dart';
 
-
 class AddToDoScreen extends StatefulWidget {
-
-    AddToDoScreen({super.key});
+  const AddToDoScreen({super.key});
 
   @override
   State<AddToDoScreen> createState() => _AddToDoScreenState();
@@ -21,10 +21,10 @@ class _AddToDoScreenState extends State<AddToDoScreen> {
    final TextEditingController TitleController = TextEditingController();
 
    final TextEditingController DescriptionController = TextEditingController();
+     final _formKey =GlobalKey<FormState>();
     bool loading=false;
   @override
   Widget build(BuildContext context) {
-    final _formKey =GlobalKey<FormState>();
     return Scaffold( 
        backgroundColor: AppColors.Color3,
        body: SingleChildScrollView(
@@ -45,6 +45,7 @@ class _AddToDoScreenState extends State<AddToDoScreen> {
                         
                         ),
                       ),  
+                       
                        SizedBox(height: 35.h,),
                       Text('Add to do!',
                       style:  TextStyle(
@@ -89,23 +90,12 @@ class _AddToDoScreenState extends State<AddToDoScreen> {
                                   return "please entre description";
                                 }return null;
                               },
-                              hintText: 'Description', controller: DescriptionController)  ,                       ),
+                              hintText: 'Description', controller: DescriptionController)  ,  ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 32.h),
                         child: CommonButton(  
-                          isloading: loading,
-                          title: "Add to list ", ontap: (){
-                          if (_formKey.currentState!.validate()) { 
-                            setState(() {
-                              loading =true;
-                            });
-                             Get.to(ProfileDashboardScreen());
-                             setState(() {
-                                loading =false;
-                             });
-                          }
-                         
-                        }
+                        
+                          title: "Add to list ", ontap: addto
                         ),
                       ),
                   
@@ -119,4 +109,49 @@ class _AddToDoScreenState extends State<AddToDoScreen> {
        )
     );
   }
+ Future addto() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        setState(() {
+          loading = true;
+        });
+        User? user = FirebaseAuth.instance.currentUser;
+        DocumentReference docRef =
+            FirebaseFirestore.instance.collection('todo').doc();
+        await docRef.set({
+          'docid': docRef.id,
+          'title': TitleController.text,
+          'description': DescriptionController.text,
+          'time': DateTime.now().toString(),
+          "userid": user!.uid.toString()
+        });
+        setState(() {
+          loading = false;
+        });
+        Get.to(AddToHome());
+      } catch (e) {
+        Get.snackbar('error', e.toString());
+        setState(() {
+         loading = false;
+        });
+      }
+    }
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
